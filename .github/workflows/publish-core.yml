@@ -1,0 +1,43 @@
+name: Publish NPM Package
+on:
+  push:
+    tags:
+      - "@pyrajs/core@*"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        uses: ./.github/actions/dependencies
+
+      - name: Setup .npmrc file
+        uses: actions/setup-node@v3
+        with:
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Build
+        run: cd packages/core && pnpm build
+
+      - name: Calculate Version
+        shell: bash
+        run: |
+          echo "PYRA_VERSION=$(git describe --tags --match "@pyrajs*" | sed 's/@pyrajs\/core@//')" >> "$GITHUB_ENV"
+
+      - name: Version
+        shell: bash
+        run: cd packages/core && pnpm version --new-version "${{env.PYRA_VERSION}}" --allow-same-version --no-git-tag-version
+
+      - name: Publish Version (next)
+        run: cd packages/core && pnpm publish --access public --no-git-checks --tag next
+        if: ${{ contains(env.PYRA_VERSION, '-') }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish Version
+        run: cd packages/core && pnpm publish --access public --no-git-checks
+        if: ${{ !contains(env.PYRA_VERSION, '-') }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
