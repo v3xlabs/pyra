@@ -7,7 +7,7 @@ importers:
 
   .: {}
 
-  packages/pyra:
+  packages/core:
     devDependencies:
       tsup:
         specifier: ^6.7.0
@@ -16,7 +16,14 @@ importers:
         specifier: ^5.0.4
         version: 5.0.4
 
-  packages/pyra-core: {}
+  packages/pyra:
+    devDependencies:
+      tsup:
+        specifier: ^6.7.0
+        version: 6.7.0(typescript@5.0.4)
+      typescript:
+        specifier: ^5.0.4
+        version: 5.0.4
 
 packages:
 
