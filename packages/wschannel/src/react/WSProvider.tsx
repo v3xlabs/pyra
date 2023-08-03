@@ -17,10 +17,7 @@ export const WSProvider = <S extends ServerOrClient = 'client', Config extends W
 
             const send = new TypedEvent<WSMessage<'client'>>();
             const receive = new TypedEvent<WSMessage<'server'>>();
-            const windowCallbacks: Record<string, {
-                portal: Window;
-                functions: Function[];
-            }> = {};
+            const windowCallbacks: Function[] = [];
 
             const state: WSChannelContextT<'client'> = {
                 type: 'client',
@@ -33,20 +30,13 @@ export const WSProvider = <S extends ServerOrClient = 'client', Config extends W
                         receive.emit(event.data);
                     };
 
-                    const curportal = windowCallbacks[portal.name] || {
-                        portal,
-                        functions: [],
-                    };
-
-                    windowCallbacks[portal.name] = curportal;
-
-                    portal.addEventListener('message', receiveCallback);
+                    window.addEventListener('message', receiveCallback);
 
                     send.on((message) => {
                         portal.postMessage(message, '*');
                     });
 
-                    curportal.functions.push(receiveCallback);
+                    windowCallbacks.push(receiveCallback);
                 },
                 send: send.emit,
                 receive,
@@ -56,12 +46,9 @@ export const WSProvider = <S extends ServerOrClient = 'client', Config extends W
             setState(state);
 
             return () => {
-                for (let key of Object.keys(windowCallbacks)) {
-                    const { portal, functions } = windowCallbacks[key];
-                    for (let callback of functions) {
-                        portal.removeEventListener('message', callback as any);
-                    }
-                }
+                windowCallbacks.forEach((callback) => {
+                    window.removeEventListener('message', callback as any);
+                });
             };
         }
         if (type === 'server') {
