@@ -2,7 +2,17 @@
     "name": "@pyrajs/wschannel",
     "description": "",
     "version": "0.0.1",
-    "main": "index.js",
+    "main": "./dist/index.js",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.ts",
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/esm/index.js",
+        "require": "./dist/index.js"
+      },
+      "./package.json": "./package.json"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "tsup"
