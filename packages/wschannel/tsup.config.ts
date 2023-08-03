@@ -9,7 +9,7 @@ const config: Options = {
     splitting: true,
     clean: true,
     minify: true,
-    legacyOutput: true,
+    legacyOutput: false,
     target: 'es2018',
     tsconfig: 'tsconfig.json',
     external: []
