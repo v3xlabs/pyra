@@ -1,0 +1,21 @@
+{
+    "name": "@pyrajs/connector",
+    "description": "",
+    "version": "0.0.1",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsup"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "LGPL-3",
+    "devDependencies": {
+        "@types/react": "^18.2.18",
+        "tsup": "^6.7.0",
+        "typescript": "^5.0.4"
+    },
+    "peerDependencies": {
+        "react": "^18.2.0"
+    }
+}
