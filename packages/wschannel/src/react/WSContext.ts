@@ -11,7 +11,7 @@ type WSChannelContextBaseT<S extends ServerOrClient, R extends ServerOrClient = 
     type: S;
     receive?: TypedEvent<WSMessage<R>>;
     send?: (message: WSMessage<S>) => void;
-    connect?: () => void;
+    connect?: (window: Window | undefined) => void;
 };
 
 export type WSChannelContextT<S extends ServerOrClient, R extends ServerOrClient = InverseServerOrClient<S>> =

@@ -1,4 +1,4 @@
-export * from './useClient';
+export * from './useConnect';
 export * from './useGoal';
 export * from './useSend';
 export * from './WSContext';
