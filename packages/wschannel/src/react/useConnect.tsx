@@ -8,6 +8,8 @@ export const useConnect = () => {
 
     if (context.type !== 'client') throw new Error('useConnect can only be used in a client context.');
 
+    if (!context.connect) throw new Error('Client not setup to handle connections');
+
     const connect = useCallback((url: string = 'https://wallet.select') => {
         const width = 400;
         const height = 600;

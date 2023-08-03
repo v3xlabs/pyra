@@ -10,7 +10,7 @@ export const WSProvider = <S extends ServerOrClient = 'client', Config extends W
     const [state, setState] = useState<WSChannelContextT<S>>();
 
     React.useEffect(() => {
-        const type = config.type;
+        const type = config.type || 'client';
 
         if (type === 'client') {
             console.log('Mounting Client');
