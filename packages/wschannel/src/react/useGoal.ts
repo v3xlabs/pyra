@@ -5,14 +5,14 @@ import { InverseServerOrClient, ServerOrClient } from "../types/ServerOrClient";
 import { WSChannelContext } from "./WSContext";
 
 export const useGoal = <
-    M extends ServerOrClient = 'server',
+    M extends ServerOrClient = 'client',
     R extends ServerOrClient = InverseServerOrClient<M>,
     G extends WSGoals<R> = WSGoals<R>,
     D extends WSGoalsData<R, G> = WSGoalsData<R, G>,
     O = any
 >(
     goal: G,
-    function_: (message: D, send?: (message: WSMessage<R>) => void) => O | Promise<O>,
+    function_: (message: D, send?: (message: WSMessage<M>) => void) => O | Promise<O>,
     options?: {
         type?: M;
     }
