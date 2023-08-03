@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { WSGoals, WSGoalsData, WSMessage } from "..";
 import { Optional } from "../types/Optional";
 import { InverseServerOrClient, ServerOrClient } from "../types/ServerOrClient";
@@ -18,19 +18,25 @@ export const useGoal = <
     }
 ): Optional<O> => {
     const [result, setResult] = useState<O | undefined>(undefined);
-    const type = options?.type ?? 'server';
-    console.log(type);
+    // @ts-ignore
+    const sType = options?.type ?? 'server';
 
     const context = useContext(WSChannelContext);
 
     if (!context) throw new Error('WSChannelContext is not defined');
 
     useEffect(() => {
-        context.receive?.on(async (event) => {
+        const fnfun = async (event: WSMessage<M>) => {
             if (event.goal === goal) {
                 setResult(await function_(event.data as D, context.send));
             }
-        });
+        };
+
+        context.receive?.on(fnfun as any);
+
+        return () => {
+            context.receive?.off(fnfun as any);
+        }
     }, []);
 
     return result;
